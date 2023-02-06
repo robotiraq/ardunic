@@ -1,13 +1,33 @@
 <template>
   <div class="fixed w-full z-20 scroll-smooth" ref="wew">
     <Navbar></Navbar>
+    <div
+      v-show="addedtocart"
+      class="absolute top-0 w-full flex flex-row bg-green-500 p-8 text-2xl font-semibold text-white items-center justify-center"
+    >
+      <p class="">Added to Cart</p>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="3"
+        stroke="currentColor"
+        class="w-7 h-7 ml-2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M4.5 12.75l6 6 9-13.5"
+        />
+      </svg>
+    </div>
   </div>
   <div class="grid grid-cols-6 bg-slate-50 text-left">
     <div v-if="isFetched" class="col-span-4 col-start-2 mt-28">
       <img class="rounded-lg" src="../src/assets/web.png" alt="" />
       <div class="grid grid-cols-3 my-8">
         <div
-          class="group relative m-4 p-4 rounded-3xl bg-white drop-shadow flex flex-col items-center hover:scale-105 hover:shadow-lg duration-200"
+          class="group relative m-4 p-4 rounded-3xl bg-white drop-shadow flex flex-col items-center hover:shadow-lg duration-200"
           v-for="product in products"
         >
           <img
@@ -57,7 +77,8 @@
             </svg>
           </div>
           <div
-            class="opacity-0 absolute bottom-0 font-semibold bg-indigo-400 text-white w-full rounded-b-3xl py-4 group-hover:opacity-100 flex flex-row items-center justify-center transition delay-150"
+            @click="addedtoCart()"
+            class="opacity-0 cursor-pointer absolute bottom-0 font-semibold bg-indigo-400 text-white w-full rounded-b-3xl py-4 group-hover:opacity-100 flex flex-row items-center justify-center transition"
           >
             <p>Add to Cart</p>
             <svg
@@ -95,6 +116,7 @@ export default {
       products: [],
       imagePrefix: "https://ardunic-images.s3.eu-central-1.amazonaws.com/",
       fav: [],
+      addedtocart: false,
     };
   },
   created() {
@@ -121,6 +143,12 @@ export default {
         this.fav.splice(0, 0, favMovie);
       }
       console.log(this.fav);
+    },
+    addedtoCart() {
+      this.addedtocart = true;
+      setTimeout(() => {
+        this.addedtocart = false;
+      }, "1000");
     },
   },
 };
