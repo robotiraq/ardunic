@@ -128,12 +128,17 @@ export default {
         this.products = data.data;
         this.isFetched = true;
       });
+  },
+  mounted() {
     window.addEventListener("scroll", this.handleScroll);
   },
   methods: {
     handleScroll() {
-      this.$refs.wew.classList.add("shadow-lg");
-      return;
+      if (window.pageYOffset > 1) {
+        this.$refs.wew.classList.add("shadow-lg");
+      } else {
+        this.$refs.wew.classList.remove("shadow-lg");
+      }
     },
     setFavorite(favMovie) {
       let index = this.fav.indexOf(favMovie);
@@ -144,6 +149,7 @@ export default {
       }
       console.log(this.fav);
     },
+
     addedtoCart() {
       this.addedtocart = true;
       setTimeout(() => {
