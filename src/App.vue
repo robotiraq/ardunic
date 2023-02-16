@@ -22,9 +22,13 @@
       </svg>
     </div>
   </div>
-  <div class="grid grid-cols-6 bg-slate-50 text-left">
-    <div v-if="isFetched" class="col-span-4 col-start-2 mt-28">
-      <img class="rounded-lg" src="../src/assets/web.png" alt="" />
+  <div class="grid grid-cols-6 bg-slate-50 text-left justify-items-center">
+    <div v-if="isFetched" class="max-w-7xl col-span-4 col-start-2 mt-28">
+      <img
+        class="rounded-lg max-w-6xl m-auto"
+        src="../src/assets/web.png"
+        alt=""
+      />
       <div class="grid grid-cols-3 my-8">
         <div
           class="group relative m-4 p-4 rounded-3xl bg-white drop-shadow flex flex-col items-center hover:shadow-lg duration-200"
@@ -36,7 +40,7 @@
             alt=""
           />
           <div
-            class="w-full my-4 bg-stone-800 px-3 py-2 rounded-xl text-lg font-bold text-white flex flex-row items-center justify-center"
+            class="my-4 w-1/3 bg-stone-800 px-3 py-2 rounded-xl text-lg font-bold text-white flex flex-row items-center justify-center"
           >
             <p>{{ product.price.showPrice }}</p>
             <P class="ml-2">IQD</P>

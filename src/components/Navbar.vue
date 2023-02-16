@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row items-center bg-slate-50">
+  <div class="max-w-7xl flex flex-row items-center m-auto bg-slate-50">
     <div
       class="cursor-pointer flex ml-4 my-4 flex-row justify-center items-center bg-indigo-400 py-2 p-3 rounded-lg"
     >
