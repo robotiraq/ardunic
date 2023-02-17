@@ -1,6 +1,9 @@
 <template>
+  <!-- <PageCompenent></PageCompenent> -->
+
   <div class="fixed w-full z-20 scroll-smooth" ref="wew">
     <Navbar></Navbar>
+
     <div
       v-show="addedtocart"
       class="absolute top-0 w-full flex flex-row bg-green-500 p-8 text-2xl font-semibold text-white items-center justify-center"
@@ -22,25 +25,57 @@
       </svg>
     </div>
   </div>
+
   <div class="grid grid-cols-6 bg-slate-50 text-left justify-items-center">
     <div v-if="isFetched" class="max-w-7xl col-span-4 col-start-2 mt-28">
       <img
-        class="rounded-lg max-w-6xl m-auto"
+        class="rounded-lg max-w-6xl m-auto mb-3"
         src="../src/assets/web.png"
         alt=""
       />
-      <div class="grid grid-cols-3 my-8">
+      <!-- Pagnation -->
+
+      <div
+        class="flex flex-row justify-evenly w-1/2 m-auto bg-indigo-400 rounded-lg p-2 text-xl max-w-2xl"
+      >
+        <button :disabled="currentPage <= 1" @click="currentPage--">
+          Previous
+        </button>
+        <button
+          v-for="pageNumber in pages"
+          :key="pageNumber"
+          class=""
+          @click="currentPage = pageNumber"
+        >
+          {{ pageNumber }}
+        </button>
+        <button :disabled="currentPage == PageCount" @click="currentPage++">
+          Next
+        </button>
+      </div>
+
+      <!-- Pagnation -->
+      <!--           v-for="product in paginatedProducts"
+ -->
+      <input
+        class="border px-4 rounded-lg"
+        type="text"
+        v-model="searchQuery"
+        placeholder="Search products..."
+      />
+      <div class="grid grid-cols-3 mb-8">
         <div
           class="group relative m-4 p-4 rounded-3xl bg-white drop-shadow flex flex-col items-center hover:shadow-lg duration-200"
-          v-for="product in products"
+          v-for="product in paginatedProducts"
+          :key="product.id"
         >
           <img
-            class="max-h-48 cursor-pointer"
+            class="max-h-52 cursor-pointer"
             :src="imagePrefix + product.images[0]"
             alt=""
           />
           <div
-            class="my-4 w-1/3 bg-stone-800 px-3 py-2 rounded-xl text-lg font-bold text-white flex flex-row items-center justify-center"
+            class="my-4 w-full bg-stone-800 px-3 py-2 rounded-xl text-lg font-bold text-white flex flex-row items-center justify-center"
           >
             <p>{{ product.price.showPrice }}</p>
             <P class="ml-2">IQD</P>
@@ -104,23 +139,38 @@
       </div>
     </div>
   </div>
+  <!-- <pagination
+    :totalPages="10"
+    :perPage="10"
+    :currentPage="currentPage"
+    @pagechanged="onPageChange"
+  ></pagination> -->
 </template>
 
 <script>
 import Navbar from "../src/components/Navbar.vue";
+import Pagination from "./components/Pagination.vue";
+import PageCompenent from "./components/Page.vue";
 export default {
   components: {
     Navbar,
+    Pagination,
+    PageCompenent,
   },
   name: "App",
   data() {
     return {
-      API: "https://api.ardunic.com/v1/products",
+      API: "https://api.ardunic.com/v1/products?s=100",
       isFetched: false,
       products: [],
       imagePrefix: "https://ardunic-images.s3.eu-central-1.amazonaws.com/",
       fav: [],
       addedtocart: false,
+      // currentPage: 1,
+      perPage: 6,
+      currentPage: 1,
+      PageCount: 0,
+      searchQuery: "",
     };
   },
   created() {
@@ -136,7 +186,35 @@ export default {
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
   },
+  computed: {
+    filteredProducts() {
+      return this.products.filter((product) =>
+        product.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
+    pageCount() {
+      this.PageCount = Math.ceil(this.products.length / this.perPage);
+      return Math.ceil(this.products.length / this.perPage);
+    },
+    paginatedProducts() {
+      const startIndex = (this.currentPage - 1) * this.perPage;
+      const endIndex = startIndex + this.perPage;
+      const productsCopy = [...this.products]; // Make a copy of this.products
+      return productsCopy.slice(startIndex, endIndex);
+    },
+    pages() {
+      const pages = [];
+      for (let i = 1; i <= this.pageCount; i++) {
+        pages.push(i);
+      }
+      return pages;
+    },
+  },
   methods: {
+    onPageChange(page) {
+      console.log(page);
+      this.currentPage = page;
+    },
     handleScroll() {
       if (window.pageYOffset > 1) {
         this.$refs.wew.classList.add("shadow-lg");
