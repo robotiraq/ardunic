@@ -28,66 +28,51 @@
 
   <div class="grid grid-cols-6 bg-slate-50 text-left justify-items-center">
     <div v-if="isFetched" class="max-w-7xl col-span-4 col-start-2 mt-28">
-      <img
+      <!-- <img
         class="rounded-lg max-w-6xl m-auto mb-3"
         src="../src/assets/web.png"
         alt=""
-      />
-      <!-- Pagnation -->
+      /> -->
 
-      <div
-        class="flex flex-row justify-evenly w-1/2 m-auto bg-indigo-400 rounded-lg p-2 text-xl max-w-2xl"
-      >
-        <button :disabled="currentPage <= 1" @click="currentPage--">
-          Previous
-        </button>
-        <button
-          v-for="pageNumber in pages"
-          :key="pageNumber"
-          class=""
-          @click="currentPage = pageNumber"
-        >
-          {{ pageNumber }}
-        </button>
-        <button :disabled="currentPage == PageCount" @click="currentPage++">
-          Next
-        </button>
-      </div>
-
-      <!-- Pagnation -->
       <!--           v-for="product in paginatedProducts"
  -->
       <input
-        class="border px-4 rounded-lg"
+        class="border px-4 py-2 rounded-lg w-1/3 ml-6"
         type="text"
         v-model="searchQuery"
         placeholder="Search products..."
       />
-      <div class="grid grid-cols-3 mb-8">
+      <div class="grid grid-cols-3 mb-2">
         <div
-          class="group relative m-4 p-4 rounded-3xl bg-white drop-shadow flex flex-col items-center hover:shadow-lg duration-200"
+          class="group relative m-4 rounded-3xl bg-white drop-shadow flex flex-col items-center hover:shadow-lg duration-200"
           v-for="product in paginatedProducts"
           :key="product.id"
         >
           <img
-            class="max-h-52 cursor-pointer"
+            class="max-h-40 cursor-pointer"
             :src="imagePrefix + product.images[0]"
             alt=""
           />
           <div
-            class="my-4 w-full bg-stone-800 px-3 py-2 rounded-xl text-lg font-bold text-white flex flex-row items-center justify-center"
+            class="my-1 bg-stone-800 px-3 py-2 rounded-xl text-lg font-bold text-white flex flex-row items-center justify-center"
           >
             <p>{{ product.price.showPrice }}</p>
             <P class="ml-2">IQD</P>
           </div>
           <div
-            v-show="product.stock < 15"
-            class="bg-red-600 text-white px-2 font-semibold py-2 rounded-l-lg bg-opacity-90 absolute top-20 right-0 text-center"
+            v-show="product.stock < 10 && product.stock > 0"
+            class="bg-orange-500 text-white px-2 font-semibold py-2 rounded-l-lg bg-opacity-90 absolute top-20 right-0 text-center"
           >
             {{ product.stock }} Pcs Left
           </div>
+          <div
+            v-show="product.stock == 0"
+            class="bg-red-600 text-white px-2 font-semibold py-2 rounded-l-lg bg-opacity-90 absolute top-20 right-0 text-center"
+          >
+            Out of stock
+          </div>
           <button
-            class="text-lg font-semibold whitespace-pre-line text-stone-800"
+            class="text-base font-semibold whitespace-pre-line text-stone-800 truncate overflow-hidden px-6 mb-2"
           >
             {{ product.title }}
           </button>
@@ -117,6 +102,7 @@
           </div>
           <div
             @click="addedtoCart()"
+            v-show="product.stock > 0"
             class="opacity-0 cursor-pointer absolute bottom-0 font-semibold bg-indigo-400 text-white w-full rounded-b-3xl py-4 group-hover:opacity-100 flex flex-row items-center justify-center transition"
           >
             <p>Add to Cart</p>
@@ -145,6 +131,28 @@
     :currentPage="currentPage"
     @pagechanged="onPageChange"
   ></pagination> -->
+  <!-- Pagnation -->
+
+  <div
+    class="flex flex-row justify-evenly w-1/2 m-auto bg-indigo-400 rounded-lg p-2 text-xl max-w-2xl"
+  >
+    <button :disabled="currentPage <= 1" @click="currentPage--">
+      Previous
+    </button>
+    <button
+      v-for="pageNumber in pages"
+      :key="pageNumber"
+      class=""
+      @click="currentPage = pageNumber"
+    >
+      {{ pageNumber }}
+    </button>
+    <button :disabled="currentPage == PageCount" @click="currentPage++">
+      Next
+    </button>
+  </div>
+
+  <!-- Pagnation -->
 </template>
 
 <script>
@@ -242,4 +250,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.truncate {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>
